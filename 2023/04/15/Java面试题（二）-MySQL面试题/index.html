@@ -1,0 +1,381 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java面试题（二）| MySQL面试题 | Demon-dou的个人博客</title><meta name="author" content="Demon-dou"><meta name="copyright" content="Demon-dou"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如何进行SQL优化？拿到运维给的查询缓慢的SQL，在数据库中通过explain进行判断是什么原因导致的查询缓慢，  因为查询的逻辑没有使用到索引 已经建立过了索引，但是索引失效了，比如：  若是因为没有使用到索引，可以考虑进行建立索引，但建立索引前要考虑到业务逻辑，要建立的索引字段是否会有较多的删改，若有较多的删改，要考虑更换索引 为什么字段的删改会导致索引的效率变低？  索引是根据值建立的，删改">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java面试题（二）| MySQL面试题">
+<meta property="og:url" content="http://example.com/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="Demon-dou的个人博客">
+<meta property="og:description" content="如何进行SQL优化？拿到运维给的查询缓慢的SQL，在数据库中通过explain进行判断是什么原因导致的查询缓慢，  因为查询的逻辑没有使用到索引 已经建立过了索引，但是索引失效了，比如：  若是因为没有使用到索引，可以考虑进行建立索引，但建立索引前要考虑到业务逻辑，要建立的索引字段是否会有较多的删改，若有较多的删改，要考虑更换索引 为什么字段的删改会导致索引的效率变低？  索引是根据值建立的，删改">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-04-15T08:50:05.000Z">
+<meta property="article:modified_time" content="2023-04-15T09:20:38.484Z">
+<meta property="article:author" content="Demon-dou">
+<meta property="article:tag" content="java 后端 408 hexo 博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java面试题（二）| MySQL面试题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-15 17:20:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Demon-dou的个人博客"><span class="site-name">Demon-dou的个人博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java面试题（二）| MySQL面试题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-15T08:50:05.000Z" title="发表于 2023-04-15 16:50:05">2023-04-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-15T09:20:38.484Z" title="更新于 2023-04-15 17:20:38">2023-04-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java面试题（二）| MySQL面试题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="如何进行SQL优化？"><a href="#如何进行SQL优化？" class="headerlink" title="如何进行SQL优化？"></a>如何进行SQL优化？</h4><p>拿到运维给的查询缓慢的SQL，在数据库中通过explain进行判断是什么原因导致的查询缓慢，</p>
+<ol>
+<li>因为查询的逻辑没有使用到索引</li>
+<li>已经建立过了索引，但是索引失效了，比如：</li>
+</ol>
+<p>若是因为没有使用到索引，可以考虑进行建立索引，但建立索引前要考虑到业务逻辑，要建立的索引字段是否会有较多的删改，若有较多的删改，要考虑更换索引</p>
+<p>为什么字段的删改会导致索引的效率变低？</p>
+<ul>
+<li>索引是根据值建立的，删改多会重建索引</li>
+</ul>
+<p>若是因为索引失效了，查看业务逻辑与现有的索引产生冲突的原因，进而考虑优化一下业务逻辑，或者更换索引</p>
+<h4 id="如何进行接口优化？"><a href="#如何进行接口优化？" class="headerlink" title="如何进行接口优化？"></a>如何进行接口优化？</h4><p>比如：<br>时间复杂度大，数据库io量大，SQL是慢SQL</p>
+<ol>
+<li><p>数据库io量大：</p>
+<p>在接口中的循环操作的时候，采用了多重循环，并在循环中进行多次数据库io操作<br>此时，可以将需要的所有数据先查询出来，然后通过stream流将所有数据转换成map， 以id为key，id对应的数据为value。<br>再在循环中根据key取map中的数据即可，无需再进行io操作</p>
+</li>
+<li><p>时间复杂度大：<br>在接口中存在多重循环，缩少循环层数<br>通过将内层循环中的集合转换成map</p>
+</li>
+</ol>
+<p>使用例子：实体类中存放list时</p>
+<h4 id="什么是mysql"><a href="#什么是mysql" class="headerlink" title="什么是mysql"></a>什么是mysql</h4><p>一种关系型数据库，是开源的，性能稳定，默认端口是3306</p>
+<h4 id="MySQL命令"><a href="#MySQL命令" class="headerlink" title="MySQL命令"></a>MySQL命令</h4><h5 id="查看mysql提供的所有存储引擎"><a href="#查看mysql提供的所有存储引擎" class="headerlink" title="查看mysql提供的所有存储引擎"></a>查看mysql提供的所有存储引擎</h5><pre><code class="mysql">show engines;
+
+-- 注：默认存储引擎是InnoDB，是一种事务性引擎，也就是说他支持事务，也只有InnoDB支持事务
+</code></pre>
+<h5 id="查看mysql当前默认存储引擎"><a href="#查看mysql当前默认存储引擎" class="headerlink" title="查看mysql当前默认存储引擎"></a>查看mysql当前默认存储引擎</h5><pre><code class="mysql">show variables like &#39;%storage_engine%&#39;;
+</code></pre>
+<h5 id="查看表的存储引擎"><a href="#查看表的存储引擎" class="headerlink" title="查看表的存储引擎"></a>查看表的存储引擎</h5><pre><code class="mysql">show table status like &quot;table_name&quot;;
+</code></pre>
+<h4 id="MyISAM与InnoDB的区别"><a href="#MyISAM与InnoDB的区别" class="headerlink" title="MyISAM与InnoDB的区别"></a>MyISAM与InnoDB的区别</h4><p>5.5版本之前的默认数据库存储引擎是MyISAM，5.5之后默认存储引擎是InnoDB，InnoDB支持事务</p>
+<p>区别：</p>
+<ol>
+<li>是否支持行级锁，InnoDB支持行级锁和表级锁，默认是行级锁，MyISAM只支持表级锁</li>
+<li>是否支持事务和崩溃后的安全恢复：InnoDB支持，MyISAM强调的是性能</li>
+<li>是否支持外键：InnoDB支持，MyISAM不支持</li>
+</ol>
+<p>一般都需要考虑到<br>项目的后期拓展，事务支持，可并发能力以及崩溃后的安全修复等问题，所以一般我们都选择InnoDB</p>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><p>数据结构</p>
+<ol>
+<li>B+树</li>
+<li>哈希索引</li>
+</ol>
+<p>一般只有大部分是单条记录查询的时候使用哈希索引，其余大部分情况都使用B+树索引，建议选择B+树</p>
+<p>针对于不同的存储引擎，索引底层的实现方式不同</p>
+<ol>
+<li><p>针对于MyISAM<br>B+树的叶节点的data域存放的是数据的地址，在检索索引的时候，根据key找到对于的data域。然后根据data域中的地址，最终找到需要的数据记录。称之为“非聚簇索引”</p>
+</li>
+<li><p>针对于InnoDB<br>分为主索引和辅助索引<br>对于主索引，B+树的叶节点data域存放的完整的数据记录，（主索引是根据数据表的主键（key）建立的）<br>对于辅助索引，B+数的叶节点data域存放的是主键的值</p>
+</li>
+</ol>
+<p>在进行主索引搜索时，直接找到key所在的节点即可获得数据<br>在进行辅助索引搜索时，需要先取出主键的值，然后再找一遍主索引，最后获取到数据记录</p>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>逻辑上的一组操作，要么都执行，要么都不执行</p>
+<p>典型例子：转账。</p>
+<p>四大特性：</p>
+<ol>
+<li>原子性：要么全部完成，要么不起作用</li>
+<li>一致性：执行事务之后，数据要保持一致，多个事务对同一个数据读取的结果是相同的</li>
+<li>隔离性：并发访问数据库的时候，一个用户的事务不能被其他的事务所干扰，各个并发事务之间是相互独立的</li>
+<li>持久性：一个事务被提交后，对数据库的数据改变是永久的，即使数据库发生故障也不会受到影响</li>
+</ol>
+<h5 id="并发事务会产生的问题"><a href="#并发事务会产生的问题" class="headerlink" title="并发事务会产生的问题"></a>并发事务会产生的问题</h5><ol>
+<li>脏读： 一个事务访问数据并对其进行修改，但还没有提交到数据库中，此时，另一个事务访问数据，得到的就是脏数据</li>
+<li>丢失修改： 两个事务都在访问数据，第一个事务将数据修改后，第二个事务也进行修改，那第一个事务修改的数据就丢失了</li>
+<li>不可重复读： 一个事务内对数据进行多次读取，此时另一个事务也读取该数据，并对其进行了修改，那第一个事务对数据读取的结果就会不同</li>
+<li>幻读： 一个事务在读取一些数据，另一个事务对插入了一些数据，第一个事务获取到原本不存在的数据</li>
+</ol>
+<p>不可重复读与幻读的区别：不可重复读—针对于改， 幻读—针对于增删</p>
+<h5 id="事务的隔离级别？MySQL的默认隔离级别？"><a href="#事务的隔离级别？MySQL的默认隔离级别？" class="headerlink" title="事务的隔离级别？MySQL的默认隔离级别？"></a>事务的隔离级别？MySQL的默认隔离级别？</h5><p>四种隔离级别：</p>
+<ol>
+<li>读取未提交<br>最低的隔离级别，允许读取未提交的数据变更，可能导致：脏读，幻读，不可重复读</li>
+<li>读取已提交<br>读取并发事务已提交的数据，可避免脏读，可能导致：幻读，不可重复读</li>
+<li>可重复读<br>对同一个字段的多次读取结果一致，除非数据被本身事务进行修改，可避免脏读和不可重复读，可能导致：幻读</li>
+<li>可串行化<br>最高的隔离级别，完全服从ACID，所有事务依次执行，完全不干扰，可防止脏读，幻读，不可重复读</li>
+</ol>
+<p><strong>MySQL的默认隔离级别</strong>： 可重复读</p>
+<p>SQL在InnoDB的可重复度的事务隔离级别下使用的是<span style="color:red;">Next-key Lock</span>锁算法，可避免幻读的产生，达到了可串行化的隔离级别</p>
+<h4 id="表级锁与行级锁"><a href="#表级锁与行级锁" class="headerlink" title="表级锁与行级锁"></a>表级锁与行级锁</h4><p>表级锁：对整张表加锁，实现简单，资源消耗少，不会出现死锁，MyISAM和InnoDB都支持<br>行级锁：对当前操作的行加锁，可大大减少数据库操作的冲突，并发度高，开销大，可能出现死锁</p>
+<h4 id="MySQL的大表优化"><a href="#MySQL的大表优化" class="headerlink" title="MySQL的大表优化"></a>MySQL的大表优化</h4><p>当单表记录数过大时，数据库的CRUD性能会下降，优化措施：</p>
+<ol>
+<li>限定数据的范围：禁止不带任何限制的去查询所有数据的语句</li>
+<li>读写分离：主库负责写，从库负责读</li>
+<li>垂直分区：根据数据表的列进行拆分，把一张表拆分成多张表<br> 优点：可简化表的结构，易于维护<br> 缺点：主键会出现冗余，引起join操作</li>
+<li>水平分区：保证表的结构不变，按照某种策略进行数据分片，将数据分散到不同的表或不同的库中（最好分库，可分布到不同机器上，更有利于提升性能）</li>
+</ol>
+<p>数据库分片的两种常见方案</p>
+<ol>
+<li><p>客户端代理：分片逻辑在应用端，封装在jar包，通过修改或封装JDBC层实现。如：Sharding-JDBC,TDDL</p>
+</li>
+<li><p>中间件代理：在应用和数据中间加一个代理层，分片逻辑统一维护在中间件服务。如：Mycat</p>
+</li>
+</ol>
+<h4 id="分库分表后的id处理方式？"><a href="#分库分表后的id处理方式？" class="headerlink" title="分库分表后的id处理方式？"></a>分库分表后的id处理方式？</h4><p>通过设置全局唯一的id来支持： 美团的Leaf分布式ID生成系统</p>
+<p>几种考虑情况</p>
+<ol>
+<li>UUID</li>
+<li>数据库自增id</li>
+<li>Redis生成id</li>
+<li>Twitter的snowflake算法</li>
+<li>美团的Leaf分布式ID生成系统（推荐）</li>
+</ol>
+<h4 id="池化设计思想，数据库连接池？为什么需要数据库连接池？"><a href="#池化设计思想，数据库连接池？为什么需要数据库连接池？" class="headerlink" title="池化设计思想，数据库连接池？为什么需要数据库连接池？"></a>池化设计思想，数据库连接池？为什么需要数据库连接池？</h4><p>池化设计思想：初始预设资源，可以避免每次获取资源消耗</p>
+<p>数据库连接池：提前创建数据库连接，将其放入到连接池中，方便重用，减少单独连接数据库的时间</p>
+<p>为什么需要数据库连接池？</p>
+<ol>
+<li>创建数据库连接后，将其放入到连接池中，再次使用的时候，不需要建立新的连接，若池中现有连接有全部占用，会再次建立一个新的连接放入到池中。</li>
+<li>减少了用户等待建立与数据库连接的时间</li>
+</ol>
+<h4 id="一条SQL语句在mysql中如何执行的"><a href="#一条SQL语句在mysql中如何执行的" class="headerlink" title="一条SQL语句在mysql中如何执行的"></a>一条SQL语句在mysql中如何执行的</h4><p>参考：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247485097&idx=1&sn=84c89da477b1338bdf3e9fcd65514ac1&chksm=cea24962f9d5c074d8d3ff1ab04ee8f0d6486e3d015cfd783503685986485c11738ccb542ba7&token=79317275&lang=zh_CN#rd">一条SQL语句在MySQL中如何执行的 </a></p>
+<p>MySQL的基础架构<br>分为<strong>server层</strong>和<strong>存储引擎层</strong></p>
+<p><strong>server层</strong>： 所有跨存储引擎的功能都在这一层实现，如：存储过程、触发器等，还有一个binlog日志模块</p>
+<ol>
+<li>连接器：负责身份认证和权限相关（登录MySQL时）</li>
+<li>查询缓存：执行查询语句的时候，先查询缓存（MySQL8.0后移除）</li>
+<li>分析器：没有命中缓存的话，SQL语句会经过分析器，词法分析：分析SQL要干什么，语法分析：语法是否正确</li>
+<li>优化器：按MySQL认为最优的方案进行执行</li>
+<li>执行器：执行语句，校验用户是否有权限，若有权限，然后从存储引擎返回数据</li>
+</ol>
+<p><strong>存储引擎层</strong>： 主要负责数据的存储和读取，采用可替换的插件式架构，InnoDB中自有redolog日志模块</p>
+<p>查询和更新</p>
+<p>对于查询：<br>通过连接器进行身份认证和权限判断，若没有权限返回错误信息，否则，去查询缓存，若内存中存在value，则直接返回结果，否则，在分析器进行词法分析，将SQL语句按照关键词进行拆分，去判断SQL语句具体要进行什么操作，然后进行语法分析，判断SQL语句是否有语法错误，接着，进入到优化器进行优化，选择优化器认为最有的方案，进入到执行器，优先判断是否有权限，若没有权限，返回错误信息，否则，调用存储引擎接口，返回结果。</p>
+<p>对于更新：需要应用到两个日志：binlog和redolog<br>先通过分析器分析SQL语句的功能以及语法，通过权限校验之后，使用执行器去执行，调用引擎接口，修改数据，存入内存，记录到redolog中，更新状态为prepare，然后告诉执行器，执行完成了，随时可以提交，执行器收到通知后记录binlog，然后调用引擎接口，提交redolog为提交状态，更新完成。</p>
+<p>在redolog的状态为prepare，binlog写完了，发生异常重启的时候，<br>会先判断redolog是否完整，完整立即提交，若redolog只是commit状态，这时去判断binlog是否完整，完整，提交redolog，否则，回滚事务。 由此来解决数据一致性的问题</p>
+<p><img src="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/image-20230415172016212.png" alt="image-20230415172016212"></p>
+<h4 id="MySQL高性能优化规范建议"><a href="#MySQL高性能优化规范建议" class="headerlink" title="MySQL高性能优化规范建议"></a>MySQL高性能优化规范建议</h4><p>参考：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247485117&idx=1&sn=92361755b7c3de488b415ec4c5f46d73&chksm=cea24976f9d5c060babe50c3747616cce63df5d50947903a262704988143c2eeb4069ae45420&token=79317275&lang=zh_CN#rd">MySQL高性能优化规范建议,速度收藏</a></p>
+<p>数据库命名规范</p>
+<ol>
+<li>小写字母且用下划线分割</li>
+<li>禁止使用mysql保留的关键字</li>
+<li>命名不超过32个字符</li>
+<li>临时表使用tmp_为前缀，日期为后缀，备份表使用bak_为前缀，日期为后缀</li>
+<li>存储相同数据的列名和列类型保持一致（作为关联列）</li>
+</ol>
+<p>数据库基本设计规范</p>
+<ol>
+<li>数据库和表的字符集统一使用utf-8, 避免字符集转换，若有存储emoji表情，字符集采用utf8mb4</li>
+<li>所有表和字段都需要添加注释</li>
+<li>尽量控制单表数据量的大小，控制在500万以内</li>
+<li>禁止在数据库中存储图片，文件等大的二进制数据</li>
+<li>禁止在线上做数据库压力测试</li>
+<li>禁止从开发环境，测试环境直接连接生产环境</li>
+</ol>
+<p>数据库字段设计规范</p>
+<ol>
+<li>优先选择符合存储需要最小的数据类型</li>
+<li>避免使用TEXT, BLOB数据类型，最常见TEXT类型可以存储64k数据</li>
+<li>TEXT或BLOB类型只能使用前缀索引，TEXT列不能有默认值</li>
+<li>避免使用ENUM类型</li>
+<li>尽可能把所有列定义为NOT NULL</li>
+<li>使用TIMESTAMP（4个字节）或DATETIME（8个字节）存储时间<br> 注: 使用字符串存储日期型数据，会导致无法用日期函数进行计算和比较，且占用更多的空间</li>
+<li>跟金额类型的数据相关的必须使用decimal类型</li>
+</ol>
+<p>索引设计规范</p>
+<ol>
+<li>限制每张表上的索引数量，建议单张表索引不超过5个</li>
+<li>禁止给表中的每一列都建立单独的索引</li>
+<li>常见索引列建议：<ul>
+<li>出现在select、update、delete语句的where从句中的列</li>
+<li>包含在order by、group by、distinct中的字段</li>
+<li>不要将符合1,2中的字段的列都建立一个索引，通常将1、2中的字段建立联合索引效果更好</li>
+</ul>
+</li>
+<li>多表join的关联列</li>
+<li>如何选择索引列的顺序<ol>
+<li>区分度最高的放在联合索引的最左侧</li>
+<li>尽量将字段长度小的列放在联合索引的最左侧</li>
+<li>使用最频繁的列放在索引的最左侧</li>
+</ol>
+</li>
+<li>避免建立冗余索引和重复索引（会增加优化器生成执行计划的时间）</li>
+<li>对于频繁的查询优先考虑使用覆盖索引（包含了所有查询字段的索引（包括where，select，orderby, groupby））</li>
+<li>索引SET规范<ul>
+<li>不建议使用外键约束，但要在表与表中的关联键上建立索引</li>
+</ul>
+</li>
+</ol>
+<p>数据库SQL开发规范</p>
+<ol>
+<li><p>避免数据类型的隐式转换</p>
+<pre><code class="mysql">select name, phone from customer where id = &#39;123&#39;;
+</code></pre>
+</li>
+<li><p>充分利用表上已经存在的索引</p>
+</li>
+<li><p>数据库设计时，应该对以后扩展进行考虑</p>
+</li>
+<li><p>禁止使用select * ，必须使用select &lt;字段列表&gt; 查询</p>
+</li>
+<li><p>禁止使用不含字段列表的INSERT语句</p>
+</li>
+<li><p>避免使用子查询，可将子查询优化为join操作（子查询的结果集无法使用索引）</p>
+</li>
+<li><p>避免使用join连接太多的表（建议不超过5个）</p>
+</li>
+<li><p>尽可能的少使用or</p>
+</li>
+<li><p>拆分复杂的大SQL为多个小SQL</p>
+</li>
+</ol>
+<p>数据库操作行为规范</p>
+<ol>
+<li>超100万行的批量写（update，insert，delete）操作，要分批多次进行操作</li>
+</ol>
+<h4 id="一条SQL语句执行很慢的原因？"><a href="#一条SQL语句执行很慢的原因？" class="headerlink" title="一条SQL语句执行很慢的原因？"></a>一条SQL语句执行很慢的原因？</h4><p>分为两种情况</p>
+<ol>
+<li>大多数情况正常，只是偶尔会出现很慢的情况</li>
+<li>在数据量不变的情况下，这条SQL语句一直以来都执行的很慢</li>
+</ol>
+<p>针对于偶尔很慢（与SQL语句本身没有关系）</p>
+<ol>
+<li>数据库在刷新脏页（内存与磁盘的数据页内容不一致）</li>
+<li>拿不到锁</li>
+</ol>
+<p>针对于一直都很慢</p>
+<ol>
+<li>没有用上索引<br> （1）字段没有索引<br> （2）字段有索引，但没有用到<br> （3）函数操作导致没有用上索引</li>
+<li>数据库自己选错索引了（若判断没有走应该走的索引，可以通过强制走索引的方式来查询）</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Demon-dou</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/">http://example.com/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Demon-dou的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%B8%89%EF%BC%89-%E5%85%B6%E4%BB%96%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（三）| 其他面试题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java面试题（三）| 其他面试题</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%B8%80%EF%BC%89-Redis%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（一）| Redis的面试题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java面试题（一）| Redis的面试题</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Demon-dou</div><div class="author-info__description">一个喜欢记录自己日常开发经验的小码农</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8CSQL%E4%BC%98%E5%8C%96%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">如何进行SQL优化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%8E%A5%E5%8F%A3%E4%BC%98%E5%8C%96%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">如何进行接口优化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmysql"><span class="toc-number">3.</span> <span class="toc-text">什么是mysql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">MySQL命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bmysql%E6%8F%90%E4%BE%9B%E7%9A%84%E6%89%80%E6%9C%89%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-number">4.1.</span> <span class="toc-text">查看mysql提供的所有存储引擎</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bmysql%E5%BD%93%E5%89%8D%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-number">4.2.</span> <span class="toc-text">查看mysql当前默认存储引擎</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-number">4.3.</span> <span class="toc-text">查看表的存储引擎</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MyISAM%E4%B8%8EInnoDB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">5.</span> <span class="toc-text">MyISAM与InnoDB的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">6.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">7.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1%E4%BC%9A%E4%BA%A7%E7%94%9F%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.1.</span> <span class="toc-text">并发事务会产生的问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9FMySQL%E7%9A%84%E9%BB%98%E8%AE%A4%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9F"><span class="toc-number">7.2.</span> <span class="toc-text">事务的隔离级别？MySQL的默认隔离级别？</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81%E4%B8%8E%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="toc-number">8.</span> <span class="toc-text">表级锁与行级锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL%E7%9A%84%E5%A4%A7%E8%A1%A8%E4%BC%98%E5%8C%96"><span class="toc-number">9.</span> <span class="toc-text">MySQL的大表优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%8E%E7%9A%84id%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="toc-number">10.</span> <span class="toc-text">分库分表后的id处理方式？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B1%A0%E5%8C%96%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%EF%BC%9F"><span class="toc-number">11.</span> <span class="toc-text">池化设计思想，数据库连接池？为什么需要数据库连接池？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E5%9C%A8mysql%E4%B8%AD%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-number">12.</span> <span class="toc-text">一条SQL语句在mysql中如何执行的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL%E9%AB%98%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E8%A7%84%E8%8C%83%E5%BB%BA%E8%AE%AE"><span class="toc-number">13.</span> <span class="toc-text">MySQL高性能优化规范建议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E5%BE%88%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0%EF%BC%9F"><span class="toc-number">14.</span> <span class="toc-text">一条SQL语句执行很慢的原因？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/16/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E5%9B%9B%EF%BC%89-Mybatis%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（四）| MyBatis面试题">Java面试题（四）| MyBatis面试题</a><time datetime="2023-04-16T02:35:17.000Z" title="发表于 2023-04-16 10:35:17">2023-04-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%B8%89%EF%BC%89-%E5%85%B6%E4%BB%96%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（三）| 其他面试题">Java面试题（三）| 其他面试题</a><time datetime="2023-04-15T08:51:33.000Z" title="发表于 2023-04-15 16:51:33">2023-04-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%BA%8C%EF%BC%89-MySQL%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（二）| MySQL面试题">Java面试题（二）| MySQL面试题</a><time datetime="2023-04-15T08:50:05.000Z" title="发表于 2023-04-15 16:50:05">2023-04-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/15/Java%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%88%E4%B8%80%EF%BC%89-Redis%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java面试题（一）| Redis的面试题">Java面试题（一）| Redis的面试题</a><time datetime="2023-04-15T08:45:35.000Z" title="发表于 2023-04-15 16:45:35">2023-04-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/14/HEXO-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%88%E5%9B%9B%EF%BC%89-Hexo%E7%9A%84%E4%B8%BB%E9%A2%98%E7%9A%84%E4%BD%BF%E7%94%A8/" title="HEXO-搭建个人博客（四）| Hexo的主题的使用">HEXO-搭建个人博客（四）| Hexo的主题的使用</a><time datetime="2023-04-14T10:04:37.000Z" title="发表于 2023-04-14 18:04:37">2023-04-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Demon-dou</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
